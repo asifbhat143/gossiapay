@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#126b45"><title>GossiaPay</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--green:#126b45;--light:#eef8f1;--ink:#17251e;--muted:#66756c;--line:#dce8df}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f8f5;color:var(--ink)}
+header{background:linear-gradient(120deg,#0c5738,#168451);color:white;padding:24px 18px 28px;border-radius:0 0 24px 24px}
+.wrap{max-width:960px;margin:auto;padding:0 16px}header .brand{font-size:13px;letter-spacing:2px;opacity:.9;font-weight:700}h1{margin:8px 0 4px;font-size:30px}header p{margin:0;opacity:.9}.pill{display:inline-block;background:#ffffff22;border:1px solid #ffffff55;border-radius:30px;padding:6px 10px;font-size:12px;margin-top:14px}
+main{max-width:960px;margin:18px auto;padding:0 16px}.notice{background:#fff7df;border:1px solid #f1df9c;color:#665014;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.45;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 3px 12px #193b2510}.card h2{font-size:16px;margin:0 0 12px}.big{font-size:28px;font-weight:750;color:var(--green)}.muted{font-size:13px;color:var(--muted)}label{display:block;font-size:13px;font-weight:650;margin:12px 0 5px}input,select,button{font:inherit}input,select{width:100%;padding:11px 12px;border:1px solid #cbd9cf;border-radius:10px;background:#fff}button{border:0;border-radius:10px;padding:11px 14px;background:var(--green);color:#fff;font-weight:700;cursor:pointer;margin-top:12px}button.secondary{background:var(--light);color:var(--green);border:1px solid #c9e3d1}button:disabled{opacity:.5;cursor:not-allowed}.row{display:flex;gap:10px}.row>*{flex:1}.status{font-size:13px;padding:9px 11px;border-radius:9px;background:var(--light);margin-top:10px;white-space:pre-wrap}.small{font-size:12px;color:var(--muted);line-height:1.5}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted)}.scroll{overflow-x:auto}.full{grid-column:1/-1}.hide{display:none!important}
+footer{text-align:center;padding:25px 16px;color:var(--muted);font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.row{display:block}.big{font-size:25px}}
+</style></head>
+<body>
+<header><div class="wrap"><div class="brand">DARASGAH GOSSIA DASILPURA</div><h1>GossiaPay</h1><p>Monthly contribution management</p><span class="pill">Starter preview · Not connected to live payments</span></div></header>
+<main>
+<div class="notice"><b>Important:</b> This starter currently saves demo records in this browser only. It does not log users in securely or debit money. Real UPI AutoPay requires a payment provider, approved bank/merchant setup, and each household’s mandate approval.</div>
+<div class="grid">
+<section class="card"><h2>Monthly overview</h2><div class="big" id="collected">₹0</div><div class="muted">Demo contributions recorded</div><hr style="border:0;border-top:1px solid var(--line);margin:15px 0"><div class="row"><div><b id="households">0</b><div class="muted">Households</div></div><div><b>₹6,000</b><div class="muted">Teacher salary / month</div></div></div></section>
+<section class="card"><h2>Household contribution</h2><label for="houseName">Household / family name</label><input id="houseName" placeholder="e.g. Ahmad family"><label for="phone">Mobile number</label><input id="phone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"><label for="amount">Monthly contribution</label><select id="amount"><option value="200">₹200</option><option value="300">₹300</option><option value="400">₹400</option><option value="500">₹500</option></select><button id="addHouse">Add demo household</button><div class="small">Demo only: no OTP is sent and no payment mandate is created.</div><div class="status hide" id="houseStatus"></div></section>
+<section class="card"><h2>Record a payment</h2><label for="houseSelect">Household</label><select id="houseSelect"><option value="">Add a household first</option></select><label for="paidAmount">Amount paid</label><select id="paidAmount"><option value="200">₹200</option><option value="300">₹300</option><option value="400">₹400</option><option value="500">₹500</option></select><label for="payDate">Payment date</label><input type="date" id="payDate"><button id="recordPayment">Record demo payment</button><div class="status hide" id="payStatus"></div></section>
+<section class="card"><h2>AutoPay readiness</h2><div class="big" style="font-size:21px">Setup required</div><p class="muted">Before recurring debits can go live:</p><ol class="small"><li>Use a dedicated committee/institution bank account approved for collections.</li><li>Choose a payment provider that supports UPI AutoPay mandates.</li><li>Complete provider KYC and server-side integration.</li><li>Each household must approve its own mandate.</li></ol><button class="secondary" id="showChecklist">Show go-live checklist</button><div class="status hide" id="checklist">1. Confirm account holder and account type with the bank/provider.\n2. Register the committee/institution and complete KYC.\n3. Confirm fees and supported UPI AutoPay flows.\n4. Add secure backend, OTP login, consent logs and payment webhooks.\n5. Test mandate creation, debit success, failure and cancellation before launch.</div></section>
+<section class="card full"><h2>Household register</h2><div class="scroll"><table><thead><tr><th>Household</th><th>Mobile</th><th>Monthly amount</th><th>Demo status</th></tr></thead><tbody id="houseRows"><tr><td colspan="4" class="muted">No demo households yet.</td></tr></tbody></table></div><button class="secondary" id="export">Export demo records (CSV)</button><button class="secondary" id="clear">Clear demo data</button><p class="small">Do not enter sensitive personal data in this preview. Data is stored locally in this browser and is not shared across phones.</p></section>
+</div></main><footer>GossiaPay · Darasgah Gossia Dasilpura · Prototype only</footer>
+<script>
+const $=id=>document.getElementById(id);
+let households=JSON.parse(localStorage.getItem('gp_households')||'[]');
+let payments=JSON.parse(localStorage.getItem('gp_payments')||'[]');
+$('payDate').value=new Date().toISOString().slice(0,10);
+function save(){localStorage.setItem('gp_households',JSON.stringify(households));localStorage.setItem('gp_payments',JSON.stringify(payments));render()}
+function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
+function render(){
+ $('collected').textContent=money(payments.reduce((s,p)=>s+Number(p.amount),0));
+ $('households').textContent=households.length;
+ $('houseRows').innerHTML=households.length?households.map(h=>`<tr><td>${esc(h.name)}</td><td>${esc(h.phone)}</td><td>${money(h.amount)}</td><td>Demo / no AutoPay</td></tr>`).join(''):'<tr><td colspan="4" class="muted">No demo households yet.</td></tr>';
+ $('houseSelect').innerHTML=households.length?households.map(h=>`<option value="${h.id}">${esc(h.name)} — ${esc(h.phone)}</option>`).join(''):'<option value="">Add a household first</option>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('addHouse').onclick=()=>{let name=$('houseName').value.trim(),phone=$('phone').value.trim(),amount=Number($('amount').value);if(!name||!/^\d{10}$/.test(phone)){alert('Enter household name and a valid 10-digit mobile number.');return}if(households.some(h=>h.phone===phone)){alert('This mobile number is already in the demo register.');return}households.push({id:crypto.randomUUID(),name,phone,amount});$('houseName').value='';$('phone').value='';$('houseStatus').classList.remove('hide');$('houseStatus').textContent='Demo household added locally. No account or AutoPay mandate was created.';save()};
+$('recordPayment').onclick=()=>{let id=$('houseSelect').value;if(!id){alert('Add a household first.');return}payments.push({id,amount:Number($('paidAmount').value),date:$('payDate').value});$('payStatus').classList.remove('hide');$('payStatus').textContent='Demo payment record saved locally. No money was collected.';save()};
+$('showChecklist').onclick=()=>$('checklist').classList.toggle('hide');
+$('export').onclick=()=>{let rows=[['Household','Mobile','Monthly amount'],...households.map(h=>[h.name,h.phone,h.amount])];let csv=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='gossiapay-demo-households.csv';a.click();URL.revokeObjectURL(a.href)};
+$('clear').onclick=()=>{if(confirm('Clear all demo households and payment records from this browser?')){households=[];payments=[];save()}};
+render();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script></body></html>
